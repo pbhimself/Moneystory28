@@ -1,0 +1,1 @@
+-- MoneyStory intentionally ships with no demo expenses.
