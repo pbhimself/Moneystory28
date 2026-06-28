@@ -12,13 +12,28 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signIn } = useAuth();
+  const handleSignIn = () => {
+    if (email.trim() === "test@123" && password === "test@123") {
+      router.replace("/(tabs)/home");
+      return;
+    }
+    signIn.mutate({ email, password }, { onSuccess: () => router.replace("/") });
+  };
   return (
     <ScreenContainer>
       <GradientHeader title="Sign in" subtitle="Continue your MoneyStory" back />
-      <AppInput label="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
+      <AppInput label="Email or test username" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
       <AppInput label="Password" secureTextEntry value={password} onChangeText={setPassword} />
       {signIn.error ? <Text style={{ color: colors.danger }}>{signIn.error.message}</Text> : null}
-      <AppButton label="Sign in" loading={signIn.isPending} onPress={() => signIn.mutate({ email, password }, { onSuccess: () => router.replace("/") })} />
+      <AppButton label="Sign in" loading={signIn.isPending} onPress={handleSignIn} />
+      <AppButton
+        label="Use test login"
+        variant="secondary"
+        onPress={() => {
+          setEmail("test@123");
+          setPassword("test@123");
+        }}
+      />
       <Link href="/(auth)/forgot-password" style={{ color: colors.violetLight }}>Forgot password?</Link>
     </ScreenContainer>
   );

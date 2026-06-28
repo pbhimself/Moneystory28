@@ -30,6 +30,7 @@ export type Tables = {
       onboarding_step?: number;
     };
     Update: Partial<Tables["profiles"]["Insert"]>;
+    Relationships: [];
   };
   salary_settings: {
     Row: {
@@ -50,6 +51,7 @@ export type Tables = {
       currency?: string;
     };
     Update: Partial<Tables["salary_settings"]["Insert"]>;
+    Relationships: [];
   };
   weekly_targets: {
     Row: {
@@ -68,6 +70,7 @@ export type Tables = {
       currency?: string;
     };
     Update: Partial<Tables["weekly_targets"]["Insert"]>;
+    Relationships: [];
   };
   categories: {
     Row: {
@@ -89,6 +92,7 @@ export type Tables = {
       sort_order?: number;
     };
     Update: Partial<Tables["categories"]["Insert"]>;
+    Relationships: [];
   };
   expenses: {
     Row: {
@@ -117,6 +121,7 @@ export type Tables = {
       sms_fingerprint?: string | null;
     };
     Update: Partial<Tables["expenses"]["Insert"]>;
+    Relationships: [];
   };
 };
 

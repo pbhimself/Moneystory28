@@ -5,8 +5,8 @@ export async function requestSmsPermissions(): Promise<"granted" | "denied" | "u
     return "unavailable";
   }
   const result = await PermissionsAndroid.requestMultiple([
-    PermissionsAndroid.PERMISSIONS.READ_SMS,
-    PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+    PermissionsAndroid.PERMISSIONS.READ_SMS!,
+    PermissionsAndroid.PERMISSIONS.RECEIVE_SMS!,
   ]);
   return Object.values(result).every((value) => value === PermissionsAndroid.RESULTS.GRANTED) ? "granted" : "denied";
 }

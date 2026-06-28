@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { Text } from "react-native";
 import AppButton from "@/components/AppButton";
 import AvatarInitials from "@/components/AvatarInitials";
@@ -10,6 +10,15 @@ import { useSession } from "@/features/auth/hooks/useSession";
 import { useSettings } from "@/features/settings/hooks/useSettings";
 import { colors } from "@/theme";
 
+const settingsRoutes = [
+  { label: "salary", href: "/settings/salary" },
+  { label: "weekly-budget", href: "/settings/weekly-budget" },
+  { label: "categories", href: "/settings/categories" },
+  { label: "sms-detection", href: "/settings/sms-detection" },
+  { label: "currency", href: "/settings/currency" },
+  { label: "privacy", href: "/settings/privacy" },
+] as const;
+
 export default function Profile() {
   const { session } = useSession();
   const profile = useSettings(session?.user.id);
@@ -19,12 +28,10 @@ export default function Profile() {
     <ScreenContainer>
       <AvatarInitials name={name} />
       <SectionHeader title={name} />
-      {["salary", "weekly-budget", "categories", "sms-detection", "currency", "privacy"].map((item) => (
-        <Link key={item} href={`/settings/${item}`} asChild>
-          <GlassCard pressable accessibilityLabel={item}>
-            <Text style={{ color: colors.textPrimary, fontWeight: "800", textTransform: "capitalize" }}>{item.replace("-", " ")}</Text>
-          </GlassCard>
-        </Link>
+      {settingsRoutes.map((item) => (
+        <GlassCard key={item.href} pressable accessibilityLabel={item.label} onPress={() => router.push(item.href)}>
+          <Text style={{ color: colors.textPrimary, fontWeight: "800", textTransform: "capitalize" }}>{item.label.replace("-", " ")}</Text>
+        </GlassCard>
       ))}
       <AppButton label="Logout" variant="danger" loading={signOut.isPending} onPress={() => signOut.mutate(undefined, { onSuccess: () => router.replace("/") })} />
     </ScreenContainer>

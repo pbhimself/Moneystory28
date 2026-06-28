@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { Text, View } from "react-native";
 import AvatarInitials from "@/components/AvatarInitials";
 import BalanceCard from "@/components/BalanceCard";
@@ -14,6 +14,7 @@ import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
 import { dashboardTotals, weeklyUsagePercent } from "@/lib/finance";
 import { useUiStore } from "@/store/uiStore";
 import { colors } from "@/theme";
+import type { Category, Expense } from "@/types/database";
 
 export default function Home() {
   const { session } = useSession();
@@ -29,8 +30,10 @@ export default function Home() {
     fixedExpensePaise: data?.salary?.fixed_monthly_expense_paise ?? 0,
     weeklyTargetPaise: data?.weekly?.target_amount_paise ?? 1,
   });
-  const categoryName = (id: string | null) => categories.data?.find((category) => category.id === id)?.name ?? "Uncategorized";
-  const categoryColor = (id: string | null) => categories.data?.find((category) => category.id === id)?.color ?? colors.textMuted;
+  const expenseRows: Expense[] = data?.expenses ?? [];
+  const categoryRows: Category[] = categories.data ?? [];
+  const categoryName = (id: string | null) => categoryRows.find((category) => category.id === id)?.name ?? "Uncategorized";
+  const categoryColor = (id: string | null) => categoryRows.find((category) => category.id === id)?.color ?? colors.textMuted;
   return (
     <ScreenContainer refreshing={dashboard.isRefetching} onRefresh={() => dashboard.refetch()}>
       <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
@@ -45,11 +48,15 @@ export default function Home() {
         <ProgressRing percent={weeklyUsagePercent(totals.spentThisWeekPaise, data?.weekly?.target_amount_paise ?? 1)} label="Weekly" />
       </View>
       <SmartInsightCard text={`Today you spent ${totals.spentTodayPaise / 100}. Keep the weekly rhythm visible before small spends compound.`} />
-      <SectionHeader title="Recent expenses" action="View all" />
-      {data?.expenses.slice(0, 5).map((expense) => (
-        <Link key={expense.id} href={`/expense/${expense.id}`} asChild>
-          <ExpenseItem expense={expense} categoryName={categoryName(expense.category_id)} categoryColor={categoryColor(expense.category_id)} />
-        </Link>
+      <SectionHeader title="Recent expenses" action="View all" onAction={() => router.push("/(tabs)/expenses")} />
+      {expenseRows.slice(0, 5).map((expense) => (
+        <ExpenseItem
+          key={expense.id}
+          expense={expense}
+          categoryName={categoryName(expense.category_id)}
+          categoryColor={categoryColor(expense.category_id)}
+          onPress={() => router.push(`/expense/${expense.id}`)}
+        />
       ))}
     </ScreenContainer>
   );

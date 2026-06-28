@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { ShieldCheck } from "lucide-react-native";
 import { Text, View } from "react-native";
 import AppButton from "@/components/AppButton";
@@ -18,8 +18,8 @@ export default function Welcome() {
         <GlassCard>
           <Text style={{ color: colors.textSecondary, lineHeight: 22 }}>Private banking-grade expense tracking for salary, budgets, categories, insights, and reviewed SMS detections.</Text>
         </GlassCard>
-        <Link href="/(auth)/sign-in" asChild><AppButton label="Sign in" fullWidth /></Link>
-        <Link href="/(auth)/sign-up" asChild><AppButton label="Create account" variant="secondary" fullWidth /></Link>
+        <AppButton label="Sign in" fullWidth onPress={() => router.push("/(auth)/sign-in")} />
+        <AppButton label="Create account" variant="secondary" fullWidth onPress={() => router.push("/(auth)/sign-up")} />
       </View>
     </ScreenContainer>
   );
